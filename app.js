@@ -3,6 +3,12 @@ const bodyParser = require("body-parser");
 const path = require("path");
 
 const app = express();
+
+// set pug template engine and it is supported from express out of the box
+app.set('view engine', 'pug');
+// not important for pug
+app.set('views', 'views');
+
 const adminData = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 
@@ -13,6 +19,7 @@ app.use(express.static(path.join(__dirname, 'public' )));
 app.use('/admin/', adminData.routes);
 app.use(shopRoutes);
 
+
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'views','404.html'));
 })
@@ -20,3 +27,6 @@ app.use((req, res) => {
 
 
 app.listen(3000);
+
+// install 3 template engines
+// npm install --save ejs pug express-handlebars
