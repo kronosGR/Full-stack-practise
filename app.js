@@ -21,7 +21,9 @@ app.use(shopRoutes);
 
 
 app.use((req, res) => {
-  res.render('404')
+  res.render('404', {
+    pageTitle: 'Page not found',
+  })
 })
 
 

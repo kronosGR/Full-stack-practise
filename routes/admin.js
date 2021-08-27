@@ -10,7 +10,8 @@ const products = [];
 // GET /admin/add-product
 router.get('/add-product', (req, res, next) => {
   res.render('add-product', {
-    pageTitle: 'Add Product'
+    pageTitle: 'Add Product',
+    path: '/admin/add-product',
   })
 });
 
@@ -18,7 +19,7 @@ router.get('/add-product', (req, res, next) => {
 // POST /admin/add-product
 router.post('/add-product', (req, res, next) => {
   products.push({
-    title: req.body.title
+    title: req.body.title,
   })
   res.redirect('/');
 })
