@@ -2,10 +2,13 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 
+const expressHbs = require("express-handlebars");
+
 const app = express();
 
-// set pug template engine and it is supported from express out of the box
-app.set('view engine', 'pug');
+// register handlebars template engine
+app.engine('hbs', expressHbs());
+app.set('view engine', 'hbs');
 // not important for pug
 app.set('views', 'views');
 
