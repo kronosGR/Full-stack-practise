@@ -6,8 +6,12 @@ const expressHbs = require("express-handlebars");
 
 const app = express();
 
-// register handlebars template engine
-app.engine('hbs', expressHbs());
+// register handlebars template engine and set the default layouts directory
+app.engine('hbs', expressHbs({
+  layoutsDir: 'views/layouts/',
+  defaultLayout: 'main-layout',
+  extname: 'hbs'
+}));
 app.set('view engine', 'hbs');
 // not important for pug
 app.set('views', 'views');
