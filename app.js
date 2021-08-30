@@ -2,18 +2,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 
-const expressHbs = require("express-handlebars");
-
 const app = express();
 
-// register handlebars template engine and set the default layouts directory
-app.engine('hbs', expressHbs({
-  layoutsDir: 'views/layouts/',
-  defaultLayout: 'main-layout',
-  extname: 'hbs'
-}));
-app.set('view engine', 'hbs');
-// not important for pug
+// EJS setup, and it does not support layouts
+app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 const adminData = require("./routes/admin");
