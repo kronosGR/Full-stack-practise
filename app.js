@@ -16,17 +16,6 @@ app.use(bodyParser.urlencoded( {extended: false}));
 
 const errorController = require('./controllers/error');
 
-// test DB
-const db= require('./utils/database');
-
-db.execute('SELECT * FROM products')
-.then((result)=>{
-  console.log(result);
-})
-.catch((err)=>{
-  console.log(err);
-});
-
 app.use(express.static(path.join(__dirname, 'public' )));
 
 app.use('/admin/', adminRoutes);
