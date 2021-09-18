@@ -12,7 +12,7 @@
 
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('node-complete', 'root', 'node-complete', {
+const sequelize = new Sequelize('node_complete', 'root', '123456', {
 	dialect:'mysql',
 	host: '172.21.192.1'
 });
