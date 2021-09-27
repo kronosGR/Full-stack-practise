@@ -20,6 +20,19 @@ const User = require('./models/user');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// get the dummy user for epxiremental use
+app.use((req, res, next) => {
+  User.findByPk(1)
+    .then((user) => {
+      // store the user to the req for future use
+      req.user = user;
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 app.use('/admin/', adminRoutes);
 app.use(shopRoutes);
 
@@ -32,9 +45,19 @@ User.hasMany(Product);
 
 // creates tables for all the defined models
 sequelize
-  .sync({ force: true }) //forces to overwrite the table, not good for production
+  //.sync({ force: true }) //forces to overwrite the table, not good for production
+  .sync()
   .then((result) => {
-    // console.log(result);
+    return User.findByPk(1);
+  })
+  .then((user) => {
+    if (!user) {
+      return User.create({ name: 'kronos', email: 'test@test.com' });
+    }
+    return Promise.resolve(user);
+  })
+  .then((user) => {
+    // console.log(user)
     app.listen(3000);
   })
   .catch((err) => {
