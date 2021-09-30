@@ -8,13 +8,13 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-// const adminRoutes = require('./routes/admin');
+const adminRoutes = require('./routes/admin');
 // const shopRoutes = require('./routes/shop');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const errorController = require('./controllers/error');
-const mongoConnect = require('./utils/database');
+const mongoConnect = require('./utils/database').mongoConnect;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -29,16 +29,16 @@ app.use((req, res, next) => {
   //   .catch((err) => {
   //     console.log(err);
   //   });
+  next();
 });
 
-// app.use('/admin/', adminRoutes);
+app.use('/admin/', adminRoutes);
 // app.use(shopRoutes);
 
 app.use(errorController.get404);
 // install 3 template engines
 // npm install --save ejs pug express-handlebars
 
-mongoConnect((client) => {
-  console.log(client);
+mongoConnect(() => {
   app.listen(3000);
 });
