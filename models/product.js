@@ -1,33 +1,55 @@
-const db = require('../utils/database');
+const mongodb = require('mongodb');
+const getDb = require('../utils/database').getDb;
 
-const Cart = require('./cart');
+class Product {
+  constructor(title, price, description, imageUrl) {
+    this.title = title;
+    this.price = price;
+    this.description = description;
+    this.imageUrl = imageUrl;
+  }
 
-module.exports = class Product {
-	constructor(id, title, imageUrl, description, price) {
-		this.id = id;
-		this.title = title;
-		this.imageUrl = imageUrl;
-		this.description = description;
-		this.price = price;
-	}
+  save() {
+    const db = getDb();
+    return db
+      .collection('products')
+      .insertOne(this)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
-	save() {
-		return db.execute(
-			'INSERT INTO products (title, price, imageUrl, description) VALUES(?,?,?,?)',
-			[this.title, this.price, this.imageUrl, this.description]
-		);
-	}
+  static fetchAll() {
+    const db = getDb();
+    return db
+      .collection('products')
+      .find()
+      .toArray()
+      .then((products) => {
+        // console.log(products);
+        return products;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
-	static deleteById(id) {}
+  static findById(prodId) {
+    const db = getDb();
+    return db
+      .collection('products')
+      .find({ _id: mongodb.ObjectId(prodId) })
+      .next()
+      .then(product => {
+        return product;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+}
 
-	static fetchAll() {
-		return db.execute('SELECT * FROM products');
-	}
-
-	static findById(id) {
-		return db.execute(
-			'SELECT * FROM products WHERE id = ?',
-			[id]
-		);
-	}
-};
+module.exports = Product;
