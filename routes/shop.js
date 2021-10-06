@@ -18,7 +18,7 @@ router.post(
   shopController.postCartDeleteProduct
 );
 
-// router.post('/create-order', shopController.postOrder);
+router.post('/create-order', shopController.postOrder);
 // router.get('/orders', shopController.getGetOrders);
 
 // router.get('/checkout', shopController.getCheckout);

@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // get the dummy user for epxiremental use
 app.use((req, res, next) => {
-  User.findById("615adf456107af75d38f2def")
+  User.findById("615db7096107af75d38f2e01")
     .then((user) => {
       req.user = new User(user.name, user.email, user.cart, user._id);
       next();
