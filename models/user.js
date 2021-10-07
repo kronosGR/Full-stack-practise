@@ -18,7 +18,7 @@ class User {
 
   addToCart(product) {
     const cartProductIndex = this.cart.items.findIndex((cp) => {
-      return cp.productId.toString() === product._id.toString(); 
+      return cp.productId.toString() === product._id.toString();
     });
     let newQuantity = 1;
     const updatedCartItems = [...this.cart.items];
@@ -100,9 +100,12 @@ class User {
       });
   }
 
-  getOrder() {
+  getOrders() {
     const db = getDb();
-    r;
+    return db
+      .collection('orders')
+      .find({ 'user._id': new ObjectId(this._id) })
+      .toArray();
   }
 
   static findById(userId) {
