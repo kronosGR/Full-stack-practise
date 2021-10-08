@@ -15,21 +15,21 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const errorController = require('./controllers/error');
-const User = require('./models/user');
+// const User = require('./models/user');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 // get the dummy user for epxiremental use
-app.use((req, res, next) => {
-  User.findById('615db7096107af75d38f2e01')
-    .then((user) => {
-      req.user = new User(user.name, user.email, user.cart, user._id);
-      next();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+// app.use((req, res, next) => {
+//   User.findById('615db7096107af75d38f2e01')
+//     .then((user) => {
+//       req.user = new User(user.name, user.email, user.cart, user._id);
+//       next();
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
 
 app.use('/admin/', adminRoutes);
 app.use(shopRoutes);
