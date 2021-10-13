@@ -80,6 +80,10 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.find()
+  // which fields to select, -to exclude
+  //.select('title price -_id')
+  // populates data from user
+  //.populate('userId', 'name')
     .then((products) => {
       res.render('admin/products', {
         prods: products,
