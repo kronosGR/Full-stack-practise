@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -14,22 +15,20 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const errorController = require('./controllers/error');
-const mongoConnect = require('./utils/database').mongoConnect;
+const User = require('./models/user');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 // get the dummy user for epxiremental use
 app.use((req, res, next) => {
-  // User.findByPk(1)
-  //   .then((user) => {
-  //     // store the user to the req for future use
-  //     req.user = user;
-  //     next();
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-  next();
+  User.findById('616667f9dedd8e83438e7ceb')
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 app.use('/admin/', adminRoutes);
@@ -39,6 +38,23 @@ app.use(errorController.get404);
 // install 3 template engines
 // npm install --save ejs pug express-handlebars
 
-mongoConnect(() => {
-  app.listen(3000);
-});
+mongoose
+  .connect(
+    'mongodb+srv://kronos:yxhI2XOMH63PzHrm@cluster0.hrnez.mongodb.net/Shop?retryWrites=true&w=majority'
+  )
+  .then((result) => {
+    User.findOne().then((user) => {
+      if (!user) {
+        const user = new User({
+          name: 'Kronos',
+          email: 'kronos@kronos.kronos',
+          cart: {
+            items: [],
+          },
+        });
+        user.save();
+      }
+    });
+    app.listen(3000);
+  })
+  .catch((err) => console.log(err));
