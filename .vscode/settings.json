@@ -1,5 +1,6 @@
 {
   "editor.tabSize": 2,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "types-autoinstaller.saveAsDevDependency": true
+  "types-autoinstaller.saveAsDevDependency": true,
+  "debug.internalConsoleOptions": "neverOpen"
 }
