@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const mongoose = require('mongoose');
+const session = require('express-session');
 
 const app = express();
 
@@ -14,11 +15,17 @@ const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.user(
+  session({
+    secret: 'my secret',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 const errorController = require('./controllers/error');
 const User = require('./models/user');
-
-app.use(express.static(path.join(__dirname, 'public')));
 
 // get the dummy user for epxiremental use
 app.use((req, res, next) => {
