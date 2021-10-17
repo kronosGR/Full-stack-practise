@@ -3,8 +3,16 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
+
+const MONGODB_URI =
+  'mongodb+srv://kronos:yxhI2XOMH63PzHrm@cluster0.hrnez.mongodb.net/Shop?w=majority';
 
 const app = express();
+const store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: 'sessions',
+});
 
 // EJS setup, and it does not support layouts
 app.set('view engine', 'ejs');
@@ -16,28 +24,19 @@ const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.user(
+app.use(
   session({
     secret: 'my secret',
     resave: false,
     saveUninitialized: false,
+    store: store,
   })
 );
 
 const errorController = require('./controllers/error');
 const User = require('./models/user');
+const { Session } = require('inspector');
 
-// get the dummy user for epxiremental use
-app.use((req, res, next) => {
-  User.findById('616667f9dedd8e83438e7ceb')
-    .then((user) => {
-      req.user = user;
-      next();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
 
 app.use('/admin/', adminRoutes);
 app.use(shopRoutes);
@@ -48,9 +47,7 @@ app.use(errorController.get404);
 // npm install --save ejs pug express-handlebars
 
 mongoose
-  .connect(
-    'mongodb+srv://kronos:yxhI2XOMH63PzHrm@cluster0.hrnez.mongodb.net/Shop?retryWrites=true&w=majority'
-  )
+  .connect(MONGODB_URI)
   .then((result) => {
     User.findOne().then((user) => {
       if (!user) {
