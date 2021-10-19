@@ -8,23 +8,32 @@ exports.getLogin = (req, res, next) => {
   });
 };
 
+exports.getSignup = (req, res, next) => {
+  res.render('auth/signup', {
+    path: '/signup',
+    pageTitle: 'Signup',
+    isAuthenticated: false
+  });
+};
+
 exports.postLogin = (req, res, next) => {
-  User.findById('616667f9dedd8e83438e7ceb')
+  User.findById('5bab316ce0a7c75f783cb8a8')
     .then(user => {
       req.session.isLoggedIn = true;
       req.session.user = user;
-      //call it to be sure that it will be redirected after session saved
-      req.session.save((err)=>{
+      req.session.save(err => {
         console.log(err);
         res.redirect('/');
-      })
+      });
     })
     .catch(err => console.log(err));
 };
 
+exports.postSignup = (req, res, next) => {};
+
 exports.postLogout = (req, res, next) => {
   req.session.destroy(err => {
-      console.log(err);
+    console.log(err);
     res.redirect('/');
   });
 };
