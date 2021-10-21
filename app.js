@@ -4,6 +4,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const csrf = require('csurf');
 
 const MONGODB_URI =
   'mongodb+srv://kronos:yxhI2XOMH63PzHrm@cluster0.hrnez.mongodb.net/Shop?w=majority';
@@ -13,6 +14,8 @@ const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: 'sessions',
 });
+
+const csrfProtection = csrf();
 
 // EJS setup, and it does not support layouts
 app.set('view engine', 'ejs');
@@ -32,6 +35,8 @@ app.use(
     store: store,
   })
 );
+
+app.use(csrfProtection);
 
 app.use((req,res,next) => {
   if (!req.session.user){
