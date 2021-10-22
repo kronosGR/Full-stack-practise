@@ -1,9 +1,20 @@
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+const sendgridTransport = require('nodemailer-sendgrid-transport');
+
 const User = require('../models/user');
+
+const transporter = nodemailer.createTransport(
+  sendgridTransport({
+    auth: {
+      api_user: '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',
+    },
+  })
+);
 
 exports.getLogin = (req, res, next) => {
   let message = req.flash('error');
-  if (message.length>0) {
+  if (message.length > 0) {
     message = message[0];
   } else {
     message = null;
@@ -12,13 +23,13 @@ exports.getLogin = (req, res, next) => {
     path: '/login',
     pageTitle: 'Login',
     isAuthenticated: false,
-    errorMessage: message
+    errorMessage: message,
   });
 };
 
 exports.getSignup = (req, res, next) => {
   let message = req.flash('error');
-  if (message.length>0) {
+  if (message.length > 0) {
     message = message[0];
   } else {
     message = null;
@@ -27,7 +38,7 @@ exports.getSignup = (req, res, next) => {
     path: '/signup',
     pageTitle: 'Signup',
     isAuthenticated: false,
-    errorMessage: message
+    errorMessage: message,
   });
 };
 
@@ -71,7 +82,10 @@ exports.postSignup = (req, res, next) => {
   User.findOne({ email: email })
     .then((userDoc) => {
       if (userDoc) {
-        req.flash('error', 'Email exists already, please enter a different one');
+        req.flash(
+          'error',
+          'Email exists already, please enter a different one'
+        );
         return res.redirect('./signup');
       }
       return bcrypt.hash(password, 12).then((hashedPassword) => {
@@ -83,9 +97,16 @@ exports.postSignup = (req, res, next) => {
         return user.save();
       });
     })
-
     .then((result) => {
       res.redirect('./login');
+      return transporter
+        .sendMail({
+          to: email,
+          from: 'geo.elgeo@gmail.com',
+          subject: 'Sign up succeeded!',
+          html: '<h1>Welcome to our shop</h1>',
+        })
+        .catch((err) => console.log(err));
     })
     .catch((err) => console.log(err));
 };
