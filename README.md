@@ -1,7 +1,12 @@
 # Full Stack practice
 * Node.js
 * Express 
-* Template Engines(PUG, HBS, EJS)
-* MySQL and MongoDB
+* Template Engines
+* * EJS
+* * HBS
+* * PUG
+* Databases
+* * MySQL and Sequelize
+* * MongoDB and Mongoose
 * Cookies and Sessions
 * Send email with SendGrid
