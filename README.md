@@ -10,3 +10,4 @@
 * * MongoDB and Mongoose
 * Cookies and Sessions
 * Send email with SendGrid
+* Server-side validation (express-validator)
