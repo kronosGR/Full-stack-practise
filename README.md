@@ -2,11 +2,11 @@
 * Node.js
 * Express 
 * Template Engines
-* * EJS
-* * HBS
-* * PUG
+* * EJS 
+* * HBS (different branch)
+* * PUG (different branch)
 * Databases
-* * MySQL and Sequelize
+* * MySQL and Sequelize (different branch)
 * * MongoDB and Mongoose
 * Cookies and Sessions
 * Send email with SendGrid
