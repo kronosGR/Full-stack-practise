@@ -79,42 +79,34 @@ exports.postLogin = (req, res, next) => {
 exports.postSignup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
   const errors = validationResult(req);
-  
-  if (!errors.isEmpty){
-    return res.status(422).render('auth/signup',{
+
+  if (!errors.isEmpty) {
+    return res.status(422).render('auth/signup', {
       path: '/signup',
       pageTitle: 'Signup',
-      errorMessage: errors.array()[0].msg
+      errorMessage: errors.array()[0].msg,
     });
   }
 
-  User.findOne({ email: email })
-    .then((userDoc) => {
-      if (userDoc) {
-        req.flash('error', 'Email exists already, please enter a different one');
-        return res.redirect('./signup');
-      }
-      return bcrypt.hash(password, 12).then((hashedPassword) => {
-        const user = new User({
-          email: email,
-          password: hashedPassword,
-          cart: { items: [] },
-        });
-        return user.save();
+  bcrypt
+    .hash(password, 12)
+    .then((hashedPassword) => {
+      const user = new User({
+        email: email,
+        password: hashedPassword,
+        cart: { items: [] },
       });
+      return user.save();
     })
     .then((result) => {
       res.redirect('./login');
-      return transporter
-        .sendMail({
-          to: email,
-          from: 'geo.elgeo@gmail.com',
-          subject: 'Sign up succeeded!',
-          html: '<h1>Welcome to our shop</h1>',
-        })
-        .catch((err) => console.log(err));
+      return transporter.sendMail({
+        to: email,
+        from: 'geo.elgeo@gmail.com',
+        subject: 'Sign up succeeded!',
+        html: '<h1>Welcome to our shop</h1>',
+      });
     })
     .catch((err) => console.log(err));
 };
