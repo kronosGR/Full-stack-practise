@@ -1,58 +1,71 @@
 const express = require('express');
-const { check, body } = require('express-validator');
-const User = require('../models/user');
+const { check, body } = require('express-validator/check');
 
 const authController = require('../controllers/auth');
+const User = require('../models/user');
 
 const router = express.Router();
 
-router.get(
-  '/login',
-  [
-    body('email').isEmail().withMessage('Please enter a valid email'),
-    body('password', 'Password has to be valid').isLength({ min: 5 }).isAlphanumeric(),
-  ],
-  authController.getLogin
-);
+router.get('/login', authController.getLogin);
 
 router.get('/signup', authController.getSignup);
 
 router.post(
   '/login',
   [
+    body('email')
+      .isEmail()
+      .withMessage('Please enter a valid email address.'),
+    body('password', 'Password has to be valid.')
+      .isLength({ min: 5 })
+      .isAlphanumeric()
+  ],
+  authController.postLogin
+);
+
+router.post(
+  '/signup',
+  [
     check('email')
       .isEmail()
       .withMessage('Please enter a valid email.')
       .custom((value, { req }) => {
         // if (value === 'test@test.com') {
-        //   throw new Error('This email address is not allowed');
+        //   throw new Error('This email address if forbidden.');
         // }
         // return true;
-        return User.findOne({ email: value }).then((userDoc) => {
+        return User.findOne({ email: value }).then(userDoc => {
           if (userDoc) {
-            return Promise.reject('Email exists already, please pick a different one.');
+            return Promise.reject(
+              'E-Mail exists already, please pick a different one.'
+            );
           }
         });
       }),
-    body('password', 'Please enter password at least 5 characters')
+    body(
+      'password',
+      'Please enter a password with only numbers and text and at least 5 characters.'
+    )
       .isLength({ min: 5 })
       .isAlphanumeric(),
     body('confirmPassword').custom((value, { req }) => {
       if (value !== req.body.password) {
-        throw new Error('Passwords do not match');
+        throw new Error('Passwords have to match!');
       }
       return true;
-    }),
+    })
   ],
-  authController.postLogin
+  authController.postSignup
 );
-
-router.post('/signup', authController.postSignup);
 
 router.post('/logout', authController.postLogout);
 
 router.get('/reset', authController.getReset);
+
 router.post('/reset', authController.postReset);
+
 router.get('/reset/:token', authController.getNewPassword);
+
 router.post('/new-password', authController.postNewPassword);
+
 module.exports = router;
