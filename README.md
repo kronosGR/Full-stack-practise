@@ -12,3 +12,4 @@
 * Send email with SendGrid
 * Server-side validation (express-validator)
 * File/image upload (multer)
+* Generate PDF files (pdfkit)
