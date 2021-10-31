@@ -39,9 +39,9 @@ exports.postAddProduct = (req, res, next) => {
   }
 
   const errors = validationResult(req);
+  const imageUrl = image.path;
 
   if (!errors.isEmpty()) {
-    console.log(errors.array());
     return res.status(422).render('admin/edit-product', {
       pageTitle: 'Add Product',
       path: '/admin/add-product',
@@ -58,7 +58,6 @@ exports.postAddProduct = (req, res, next) => {
     });
   }
 
-  const imageUrl = image.path;
 
   const product = new Product({
     // _id: new mongoose.Types.ObjectId('5badf72403fd8b5be0366e81'),
@@ -200,8 +199,7 @@ exports.postDeleteProduct = (req, res, next) => {
     .then((product) => {
       if (!product) return next(new Error('Product not found'));
       fileHelper.deleteFile(product.imageUrl);
-      return 
-      Product.deleteOne({ _id: prodId, userId: req.user._id })
+      return Product.deleteOne({ _id: prodId, userId: req.user._id })
     })
     .then(() => {
       console.log('DESTROYED PRODUCT');
@@ -213,3 +211,4 @@ exports.postDeleteProduct = (req, res, next) => {
       return next(error);
     });
 };
+ // TODO fix problem with product delete
