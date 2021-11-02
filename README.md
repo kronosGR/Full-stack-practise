@@ -13,3 +13,4 @@
 * Server-side validation (express-validator)
 * File/image upload (multer)
 * Generate PDF files (pdfkit)
+* Accept Payments with Stripe
