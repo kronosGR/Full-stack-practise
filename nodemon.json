@@ -1,0 +1,8 @@
+{
+  "env":{
+    "MONGO_USER":"kronos",
+    "MONGO_PASSWORD": "",
+    "MONGO_DEFAULT_DATABASE":"shop",
+    "STRIPE_KEY":""
+  }
+}

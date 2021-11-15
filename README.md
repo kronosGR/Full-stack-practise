@@ -14,3 +14,4 @@
 * File/image upload (multer)
 * Generate PDF files (pdfkit)
 * Accept Payments with Stripe (stripe)
+* Environment variables
