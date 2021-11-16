@@ -15,3 +15,4 @@
 * Generate PDF files (pdfkit)
 * Accept Payments with Stripe (stripe)
 * Environment variables
+* Secure response headers (helmet)
