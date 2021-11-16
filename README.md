@@ -16,3 +16,4 @@
 * Accept Payments with Stripe (stripe)
 * Environment variables
 * Secure response headers (helmet)
+* Asset compression (compression)
