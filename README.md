@@ -17,3 +17,4 @@
 * Environment variables
 * Secure response headers (helmet)
 * Asset compression (compression)
+* Logging request data (morgan)
